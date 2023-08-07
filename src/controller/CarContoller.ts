@@ -1,27 +1,31 @@
 import { Request, Response } from 'express';
 import { carRepository } from '../repositories/carRepository';
+import { BadRequestError } from '../helpers/api-errors';
 
 export class CarController {
   async create(req: Request, res: Response) {
     const { name, marca, preco, categoria, imagem } = req.body;
 
-    try {
-      const newCar = carRepository.create({
-        name,
-        marca,
-        preco,
-        categoria,
-        imagem,
-      });
+    const newCar = carRepository.create({
+      name,
+      marca,
+      preco,
+      categoria,
+      imagem,
+    });
 
-      await carRepository.save(newCar);
+    await carRepository.save(newCar);
 
-      return res
-        .status(200)
-        .json({ message: 'Car created with succes!!', newCar });
-    } catch (error) {
-      console.log(error);
-      return res.status(500).json({ message: 'Internal server error!' });
-    }
+    return res
+      .status(200)
+      .json({ message: 'Car created with succes!!', newCar });
+  }
+
+  async list(req: Request, res: Response) {
+    const cars = await carRepository.find();
+
+    if (!cars) throw new BadRequestError('Cars not found');
+
+    return res.status(200).json(cars);
   }
 }
