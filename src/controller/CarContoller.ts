@@ -6,6 +6,8 @@ export class CarController {
   async create(req: Request, res: Response) {
     const { name, marca, preco, categoria, imagem } = req.body;
 
+    const carExists = await carRepository.findOneBy({ name });
+    if (carExists) throw new BadRequestError('Car already exists');
     const newCar = carRepository.create({
       name,
       marca,

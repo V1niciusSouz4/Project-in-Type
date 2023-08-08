@@ -7,6 +7,7 @@ const routes = Router();
 //Users
 routes.get('/user', new UserController().list);
 routes.post('/user', new UserController().create);
+routes.post('/user-login', new UserController().login);
 
 //Cars
 routes.get('/car', new CarController().list);

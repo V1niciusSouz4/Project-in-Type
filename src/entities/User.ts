@@ -26,4 +26,5 @@ export class User {
 
   @OneToMany(() => RefreshToken, refreshToken => refreshToken.userId)
   refreshTokens: RefreshToken[];
+  static id: any;
 }
